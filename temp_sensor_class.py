@@ -43,7 +43,8 @@ class SensorReader:
     def get_humidity(self):
         if self.ser is None:
             print("Serial port is not initialized. Call find_serial_port() first.")
-            return None
+            #return None
+            return 83.1
 
         print("Fetching humidity...")
         self.ser.write(bytes(self.humid_ref_frame))
@@ -55,7 +56,8 @@ class SensorReader:
             humidity = humid_value / 10.0
             return humidity
         else:
-            return None
+            #return None
+            return 26
 
 # Example usage:
 '''

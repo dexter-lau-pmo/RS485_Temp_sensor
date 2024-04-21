@@ -3,7 +3,7 @@ Description=Rs485 temp sensor reader
 After=network.target
 
 [Service]
-ExecStart=/home/admin/Sensor-Hub/bin/python3 /home/admin/RS485_Temp_sensor/main.py                                   
+ExecStart=/home/admin/SenseHub/bin/python3 /home/admin/RS485_Temp_sensor/main.py                                   
 WorkingDirectory=/home/admin/RS485_Temp_sensor                               
 Restart=always
 User=admin
