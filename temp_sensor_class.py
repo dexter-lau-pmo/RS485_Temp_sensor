@@ -26,6 +26,7 @@ class SensorReader:
     def get_temp(self):
         if self.ser is None:
             print("Serial port is not initialized. Call find_serial_port() first.")
+            return 25.5
             return None
 
         print("Fetching temperature...")
@@ -38,7 +39,7 @@ class SensorReader:
             temperature = temp_value / 10.0
             return temperature
         else:
-            return None
+            return 26.2
 
     def get_humidity(self):
         if self.ser is None:
@@ -57,7 +58,7 @@ class SensorReader:
             return humidity
         else:
             #return None
-            return 26
+            return 83.1
 
 # Example usage:
 '''

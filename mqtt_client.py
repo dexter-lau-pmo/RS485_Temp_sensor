@@ -4,12 +4,17 @@ import json
 class MQTTClient:
     def __init__(self):
         self.connect()
-
+        self.client.loop_start()
+        '''
+    def on_publish(self, client, userdata, mid, reason_codes, properties):
+        print("Message published: {mid}")
+        '''
     def on_publish(self, client, userdata, mid):
         print("Message published: {mid}")
-
+        
     def publish(self, json_object):
-        self.client.publish(self.topic, json.dumps(json_object))
+        ret = self.client.publish(self.topic, json.dumps(json_object))
+        print("Ret: " ret)
 
     def reconnect(self):
         self.client.disconnect()
@@ -17,6 +22,12 @@ class MQTTClient:
 
     def is_connection_active(self):
         return self.client.is_connected()
+        
+        '''
+    def on_connect (self , client, userdata ,flags , reason_code,properties)
+        return
+        '''
+
 
     def connect(self):
         # Specify the path to your JSON file
@@ -31,6 +42,7 @@ class MQTTClient:
         port = data['mqttSettings']['port']
         self.topic = "/1234/EnvironmentalSensor002/attrs"
 
-        self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1)
+        self.client = mqtt.Client()
         self.client.on_publish = self.on_publish
+        #self.client.on_connect = self.on_connect
         self.client.connect(broker , port, 60)
