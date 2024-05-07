@@ -4,6 +4,8 @@ Created on Fri Mar 15 16:57:21 2024
 
 @author: craps
 """
+
+#TEST FILE ONLY! NOT USED
 import serial
 
 import time

@@ -17,16 +17,39 @@ class SensorReader:
                 continue
         else:
             print("No serial port available. Please check your connections.")
-
-        self.ser = serial.Serial(port=device_name, baudrate=9600, timeout=1.0) # Remember, you might need to replace '/dev/ttyUSB0' with the port name where your USB to RS485 converter is connected
+        try:
+            self.ser = serial.Serial(port=device_name, baudrate=9600, timeout=1.0) # Remember, you might need to replace '/dev/ttyUSB0' with the port name where your USB to RS485 converter is connected
+        except serial.SerialException:
+            print("Serial port not working")
+            self.ser = None
+            
         self.temp_ref_frame = [0x01, 0x04, 0x00, 0x01, 0x00, 0x01, 0x60, 0x0a] # Request frame for temp sensor
         self.humid_ref_frame = [0x01, 0x04, 0x00, 0x02, 0x00, 0x01, 0x90, 0x0a] # Request frame for humidity sensor
+
+
+    def retry_serial_connection(self):
+        ports = serial.tools.list_ports.comports()
+        device_name = "/dev/ttyUSB0"
+        for port in ports:
+            try:
+                self.ser = serial.Serial(port.device, baudrate=9600, timeout=1.0)
+                print("Serial port found:", port.device)
+                device_name = port.device
+                break
+            except serial.SerialException:
+                continue
+        else:
+            print("No serial port available. Please check your connections.")
+        try:
+            self.ser = serial.Serial(port=device_name, baudrate=9600, timeout=1.0) # Remember, you might need to replace '/dev/ttyUSB0' with the port name where your USB to RS485 converter is connected
+        except serial.SerialException:
+            print("Serial port not working")
+            self.ser = None       
 
 
     def get_temp(self):
         if self.ser is None:
             print("Serial port is not initialized. Call find_serial_port() first.")
-            return 25.5
             return None
 
         print("Fetching temperature...")
@@ -39,13 +62,13 @@ class SensorReader:
             temperature = temp_value / 10.0
             return temperature
         else:
-            return 26.2
+            return None
 
     def get_humidity(self):
         if self.ser is None:
             print("Serial port is not initialized. Call find_serial_port() first.")
-            #return None
-            return 83.1
+            return None
+            
 
         print("Fetching humidity...")
         self.ser.write(bytes(self.humid_ref_frame))

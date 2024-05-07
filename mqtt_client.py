@@ -1,6 +1,8 @@
 import paho.mqtt.client as mqtt
 import json
 
+#FILE NOt USED
+
 class MQTTClient:
     def __init__(self):
         self.connect()
